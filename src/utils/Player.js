@@ -1,7 +1,7 @@
 export default class Player {
-	constructor(isUser) {
+	constructor(isUser, name) {
 		this.isUser = isUser;
-		
+		this.name = name;
 		// to implement a more RPG style
 		this.cool = 0; // used to determine who goes first (no repercussions)
 		this.coercion = 0; // used to bait the opponent into holding out for one more card when they would otherwise stand (no repercussions)
@@ -13,6 +13,8 @@ export default class Player {
 		this.perception = 0; // used to tell if the opponent is cheating (passive; no repercussions could result in auto win)
 		this.streetwise = 0; // adds an overall luck boost to all stats (potential advantage rolls, no repercussions)
 		// base
+		this.isTurn = false;
+		this.roundScore = 0;
 		this.roundWins = 0;
 		this.valuesInPlay =  [];
 		this.sideDeck = [];

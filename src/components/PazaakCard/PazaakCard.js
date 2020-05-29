@@ -11,6 +11,8 @@ PazaakCard.propTypes = {
 	type: PropTypes.string,
 	onClick: PropTypes.func,
 	isFaceDown: PropTypes.bool,
+	isPlayed: PropTypes.bool,
+	drawSpaceIndex: PropTypes.number,
 };
 
 function PazaakCard(props) {
@@ -19,7 +21,7 @@ function PazaakCard(props) {
 		let color = "linear-gradient(to right, #66CD00, #5DFC0A, #83F52C, #5DFC0A, #66CD00)";
 		if(type === "+") color = "linear-gradient(to right, #104E8B, #1874CD, #104E8B)"; // blue
 		else if(type === "-") color = "linear-gradient(to right, #8B0000, #CD2626, #8B0000)"; // red
-		else if (type === "+-") color = "linear-gradient(#1874CD, #104E8B, 50%, #CD2626 25%, #8B0000)"; // blue-red
+		else if (type === "177") color = "linear-gradient(#1874CD, #104E8B, 50%, #CD2626 25%, #8B0000)"; // blue-red
 		if(props.isFaceDown) color = "linear-gradient(#CDC9A5, #CDC9A5)";
 		return color;
 	};
@@ -60,6 +62,10 @@ function PazaakCard(props) {
 		alignItems: 'center',
 	};
 	
+	const printType = type => {
+		return type ? isNaN(type) ? type : String.fromCharCode(type) : type;
+	};
+	
 	return (
 		<div className="card-space">
 			<Card hoverable
@@ -70,7 +76,7 @@ function PazaakCard(props) {
 				<div className="card-outer" style={outerStyle}>
 					<div className="card-number-outer" style={numberOuterStyle}>
 						<div className="card-number-inner" style={innerStyle}>
-							 {!props.isFaceDown ? props.type + props.number : <FontAwesomeIcon size="lg" icon={faOldRepublic}/>}
+							 {!props.isFaceDown ? printType(props.type) + props.number : <FontAwesomeIcon size="lg" icon={faOldRepublic}/>}
 						</div>
 					</div>
 				</div>
