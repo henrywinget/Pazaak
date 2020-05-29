@@ -1,27 +1,40 @@
 import Player from "./Player";
 
-export default {
+const tests = {
 	allCardTypes: [
 		{
 			number: 2,
-			type: '+'
+			type: '+',
+			isPlayed: false,
 		},
 		{
 			number: 5,
-			type: '-'
+			type: '-',
+			isPlayed: true,
+			
 		},
 		{
 			number: 3,
-			type: '+-'
+			type: '+-',
+			isPlayed: false,
+			
 		},
 		{
 			number: 1,
-			type: ''
+			type: '',
+			isPlayed: false,
+			
 		}
 	],
 	
-	players: [
-		new Player(true),
-		new Player(false)
-	]
-}
+	players: []
+};
+
+const testUser = new Player(true);
+const testOpponent = new Player(false);
+
+testUser.sideDeck = tests.allCardTypes;
+testOpponent.sideDeck = tests.allCardTypes;
+tests.players = [testUser, testOpponent];
+
+export default tests;

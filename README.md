@@ -4,7 +4,7 @@
 
 ## Description
 
-The oldest card game in the Galaxy
+The oldest card game in the galaxy
 
 ## Table of Contents 
 

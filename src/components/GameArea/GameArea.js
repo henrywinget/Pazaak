@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import './GameArea.scss';
 
 GameArea.propTypes = {
-
+	children: PropTypes.node.isRequired,
 };
 
 function GameArea(props) {

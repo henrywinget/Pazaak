@@ -1,18 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SideDeck from "../SideDeck";
 
-import { Col } from "antd";
+import { Col, Row, Divider } from "antd";
 import tests from "../../utils/tests";
 
 PlayingSpace.propTypes = {
 	player: PropTypes.object,
 };
 
-function PlayingSpace(props) {
+function PlayingSpace({ player }) {
+	const spaceStyle = {
+		padding: '0 25px'
+	};
+	
 	return (
-		<Col xs={{ span: 24, order: props.player.isUser ? 1 : 0 }}
-		     lg={{ span: 12, order: props.player.isUser ? 0 : 1 }}>
-			{props.player.isUser ? 'You' : 'Opponent'}
+		<Col style={spaceStyle} xs={{ span: 24, order: player.isUser ? 1 : 0 }}
+		     lg={{ span: 12, order: player.isUser ? 0 : 1 }}>
+			<Divider orientation={player.isUser ? "left" : "right"}>{player.isUser ? 'You' : 'Opponent'}</Divider>
+			<Row>
+				Card area
+			</Row>
+			<Divider orientation={player.isUser ? "left" : "right"}>Side deck</Divider>
+			<SideDeck player={player}/>
 		</Col>
 	);
 }
