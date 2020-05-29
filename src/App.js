@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import 'antd/dist/antd.css';
+import { Layout } from 'antd';
+import { Row, Col, Space } from 'antd';
+
+import PazaakCard from "./components/PazaakCard";
+import tests from "./utils/tests";
 
 function App() {
+  const [phase, setPhase] = useState('play');
+  const { Header, Footer, Sider, Content } = Layout;
+  let content = null;
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Layout>
+        <Content style={{padding: '0 50px'}} >
+                <Row align={'center'}>
+                  {tests.cards.map((card, index) => {
+                    return <PazaakCard key={'Card_' + index} number={card.number} type={card.type}/>
+                  })}
+                </Row>
+        </Content>
+      </Layout>
     </div>
   );
 }
