@@ -1,11 +1,9 @@
+import Player from "./Player";
+
 export default {
-	cards: [
+	allCardTypes: [
 		{
 			number: 2,
-			type: '+'
-		},
-		{
-			number: 5,
 			type: '+'
 		},
 		{
@@ -20,5 +18,10 @@ export default {
 			number: 1,
 			type: ''
 		}
+	],
+	
+	players: [
+		new Player(true),
+		new Player(false)
 	]
 }

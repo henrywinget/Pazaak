@@ -6,7 +6,8 @@ import './PazaakCard.scss';
 
 PazaakCard.propTypes = {
 	number: PropTypes.number,
-	type: PropTypes.string
+	type: PropTypes.string,
+	onClick: PropTypes.func,
 };
 
 function PazaakCard(props) {
@@ -18,6 +19,7 @@ function PazaakCard(props) {
 		return color;
 	};
 	
+	// who needs sass (the irony in this statement)
 	const cardStyle = {
 		background: '#EEEEE0', // tan
 		width: 240,
@@ -52,9 +54,10 @@ function PazaakCard(props) {
 	};
 	
 	return (
-		<Col span={6} className="Card_space">
+		<div className="Card_space">
 			<Card hoverable
 			      style={cardStyle}
+			      onClick={props.onClick}
 			      bordered={true}>
 				<div className="card-outer" style={outerStyle}>
 					<div className="card-number-outer" style={numberOuterStyle}>
@@ -64,7 +67,7 @@ function PazaakCard(props) {
 					</div>
 				</div>
 			</Card>
-		</Col>
+		</div>
 	);
 }
 
