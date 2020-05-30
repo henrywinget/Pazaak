@@ -14,7 +14,7 @@ function DrawArea(props) {
 	const generateCard = ({ card, hasCard }, index) => {
 		return <PazaakCard isFaceDown={false}
 		                   number={hasCard ? card.number : null}
-		                   type={hasCard ? card.number : null}
+		                   type={hasCard ? card.type : null}
 		                   drawSpaceIndex={index}
 		                   isPlayed={!hasCard}/>
 	};

@@ -14,12 +14,26 @@ export default class Player {
 		this.streetwise = 0; // adds an overall luck boost to all stats (potential advantage rolls, no repercussions)
 		// base
 		this.isTurn = false;
+		this.isBust = false;
+		this.isPlayerOne = false;
 		this.roundScore = 0;
 		this.roundWins = 0;
 		this.valuesInPlay =  [];
 		this.sideDeck = [];
+		this.sideDeckInPlay = [];
 		this.gameWins = 0;
 		this.gameLosses = 0;
+		this.drawSpace = [
+			{ card: {}, hasCard: false},
+			{ card: {}, hasCard: false},
+			{ card: {}, hasCard: false},
+			{ card: {}, hasCard: false},
+			{ card: {}, hasCard: false},
+			{ card: {}, hasCard: false},
+			{ card: {}, hasCard: false},
+			{ card: {}, hasCard: false},
+			{ card: {}, hasCard: false},
+		]
 	}
 	
 	hasWon() {
