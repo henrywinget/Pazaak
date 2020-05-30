@@ -10,6 +10,22 @@ export const shuffle = () =>  {
 	return cards.sort(() => Math.random() - 0.5);
 };
 
+export const drawSpace = () => {
+	return [
+		{ card: {}, hasCard: false},
+		{ card: {}, hasCard: false},
+		{ card: {}, hasCard: false},
+		{ card: {}, hasCard: false},
+		{ card: {}, hasCard: false},
+		{ card: {}, hasCard: false},
+		{ card: {}, hasCard: false},
+		{ card: {}, hasCard: false},
+		{ card: {}, hasCard: false},
+	]
+};
+
 export default {
 	shuffle,
+	drawSpace,
+	
 };

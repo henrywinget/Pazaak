@@ -5,14 +5,17 @@ import DrawArea from "../DrawArea";
 import GameUX from "../GameUX";
 
 import { Col, Row, Divider } from "antd";
-import tests from "../../utils/tests";
 
 PlayingSpace.propTypes = {
 	player: PropTypes.object.isRequired,
 	drawCard: PropTypes.func.isRequired,
+	gameStarted: PropTypes.bool,
+	endTurn: PropTypes.func,
+	standRound: PropTypes.func,
+	processAITurn: PropTypes.func,
 };
 
-function PlayingSpace({ player, drawCard }) {
+function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted, processAITurn }) {
 	const spaceStyle = {
 		padding: '0 25px'
 	};
@@ -24,6 +27,12 @@ function PlayingSpace({ player, drawCard }) {
 			<Divider orientation={player.isUser ? "left" : "right"}>{player.name}</Divider>
 			<GameUX wins={player.roundWins}
 			        drawCard={drawCard}
+			        endTurn={endTurn}
+			        standRound={standRound}
+			        gameStarted={gameStarted}
+			        processAITurn={processAITurn}
+			        didStand={player.didStand}
+			        isTurn={player.isTurn}
 			        isUser={player.isUser}
 			        roundScore={player.roundScore}
 			/>

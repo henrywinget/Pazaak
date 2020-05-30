@@ -1,6 +1,6 @@
 import Player from "./Player";
 import Card from "./Card.js";
-import Game from "./Game";
+// import Game from "./Game";
 
 const tests = {
 	allCardTypes: [

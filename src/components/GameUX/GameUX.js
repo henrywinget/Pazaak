@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import PropTypes from "prop-types";
 import { Col, Row } from "antd";
@@ -9,12 +9,23 @@ import './GameUX.scss';
 GameUX.propTypes = {
 	wins: PropTypes.number,
 	isUser: PropTypes.bool,
+	isTurn: PropTypes.bool,
+	gameStarted: PropTypes.bool,
 	roundScore: PropTypes.number,
-	player: PropTypes.object.isRequired,
-	drawCard: PropTypes.func.isRequired,
+	endTurn: PropTypes.func.isRequired,
+	standRound: PropTypes.func.isRequired,
+	didStand: PropTypes.bool,
+	
 };
 
-function GameUX({ wins, isUser, roundScore, drawCard }) {
+function GameUX({ wins, isUser, isTurn, didStand, roundScore, standRound, gameStarted, endTurn, processAITurn }) {
+	useEffect(()=> {
+		if(!isUser && isTurn && !didStand) {
+			console.log('Processing AI turn...');
+			setTimeout(processAITurn, 1000);
+		}
+	}, [isTurn]);
+	
 	const scoreAreaStyle = {
 		display: 'flex',
 		flexDirection: isUser ? 'row' : 'row-reverse',
@@ -30,8 +41,8 @@ function GameUX({ wins, isUser, roundScore, drawCard }) {
 	
 	const scores = [{ win: false }, { win: false }, { win: false}];
 	const buttons = [
-			{name: 'End Turn', onClick: drawCard},
-			{name: 'Stand', onClick: function () {}}
+			{name: 'End Turn', onClick: endTurn, disabled: !gameStarted || !isTurn},
+			{name: 'Stand', onClick: standRound, disabled: !gameStarted || !isTurn}
 		];
 	
 	const returnRoundWins = () => {
@@ -52,8 +63,11 @@ function GameUX({ wins, isUser, roundScore, drawCard }) {
 	
 	const returnButtons = () => {
 		if(!isUser) return null;
-		return buttons.map((button, index) => {
-			return <GameButton onClick={button.onClick} name={button.name}/>
+		return buttons.map((button) => {
+			return <GameButton key={"Button_" + button.name}
+			                   disabled={button.disabled}
+			                   onClick={button.onClick}
+			                   name={button.name}/>
 		})
 	};
 	

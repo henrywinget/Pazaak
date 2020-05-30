@@ -68,7 +68,7 @@ function PazaakCard(props) {
 	
 	return (
 		<div className="card-space">
-			<Card hoverable
+			<Card hoverable={!props.isFaceDown && props.type}
 			      style={cardStyle}
 			      bodyStyle={{padding: '.75rem'}}
 			      onClick={props.onClick}

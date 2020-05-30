@@ -9,7 +9,7 @@ import PlayingSpace from "../PlayingSpace/PlayingSpace";
 import Game from "../../utils/Game";
 import Card from "../../utils/Card";
 
-import { shuffle } from "../../utils/gameFuncs";
+import { shuffle, drawSpace } from "../../utils/gameFuncs";
 
 GameArea.propTypes = {
 
@@ -21,6 +21,7 @@ function GameArea(props) {
 	const [playerOne, setPlayerOne] = useState(tests.players[0]);
 	const [playerTwo, setPlayerTwo] = useState(tests.players[1]);
 	const [deck, setDeck] = useState(shuffle());
+	const [playerTurn, setPlayerTurn] = useState(0);
 	const [roundsPlayed, setRoundsPlayed] = useState(0);
 	const [winningPlayer, setWinningPlayer] = useState({});
 	const [gameStarted, setGameStarted] = useState(false);
@@ -28,6 +29,7 @@ function GameArea(props) {
 	const determineFirst = () => {
 		const playerClone = {...playerOne};
 		playerClone.isPlayerOne = true;
+		playerClone.isTurn = true;
 		setPlayerOne(playerClone);
 	};
 	
@@ -36,37 +38,127 @@ function GameArea(props) {
 	}, []);
 
 	const drawCard = player => {
-		// if(deck.length > 0) {
+		// setting clones to alter state
+		console.log(`${player.name} drew a card.`);
+		const { thisPlayer, thisPlayerFunc } = determinePlayers(player);
 		const deckClone = [...deck];
-		const playerClone = {...player};
+		const values = [...thisPlayer.valuesInPlay];
+		const drawSpace = [...thisPlayer.drawSpace];
 		const cardDrawn = deckClone.shift();
-		playerClone.valuesInPlay.push(cardDrawn);
-		playerClone.valuesInPlay.forEach((card, index) => {
-			playerClone.drawSpace[index].card = card;
-			playerClone.drawSpace[index].hasCard = true;
+		thisPlayer.isTurn = true;
+		values.push(cardDrawn);
+		values.forEach((card, index) => {
+			drawSpace[index].card = card;
+			drawSpace[index].hasCard = true;
 		});
-		playerClone.roundScore += cardDrawn.number;
-		if(playerClone.roundScore > 20) {
-			playerClone.isBust = true;
+		thisPlayer.roundScore += cardDrawn.number;
+		thisPlayer.valuesInPlay = values;
+		thisPlayer.drawSpace = drawSpace;
+		if(thisPlayer.roundScore > 20) {
+			thisPlayer.isBust = true;
+			standRound(thisPlayer);
+		} else if (thisPlayer.roundScore === 20) {
+			standRound(thisPlayer);
+		} else {
+			thisPlayer.isBust = false;
 		}
-		if(playerClone.isPlayerOne) {
-			setPlayerOne(playerClone)
-		}
-		else {
-			setPlayerTwo(playerClone);
-		}
+		// probably a better way to do this
+		thisPlayerFunc(thisPlayer);
 		setDeck(deckClone);
 	};
 
 	const startGame = () => {
 		console.log('Starting game...');
-		console.log(playerOne);
-		console.log(playerTwo);
 		setGameStarted(true);
 		drawCard(playerOne);
 	};
 	
-	end
+	const resetPlayerRound = () => {
+		const firstPlayer = {...playerOne};
+		const secondPlayer = {...playerTwo};
+		firstPlayer.roundScore = 0;
+		secondPlayer.roundScore = 0;
+		firstPlayer.drawSpace = drawSpace();
+		secondPlayer.drawSpace = drawSpace();
+		firstPlayer.valuesInPlay = [];
+		secondPlayer.valuesInPlay = [];
+		setPlayerOne(firstPlayer);
+		setPlayerTwo(secondPlayer);
+	};
+	
+	const endRound = () => {
+		console.log('Ending round!');
+		const firstPlayer = {...playerOne};
+		const secondPlayer = {...playerTwo};
+		if(firstPlayer.roundScore < secondPlayer.roundScore) {
+			firstPlayer.roundWins++;
+		} else if (firstPlayer.roundScore > secondPlayer.roundScore) {
+			secondPlayer.roundWins++;
+		}
+		setPlayerOne(firstPlayer);
+		setPlayerTwo(secondPlayer);
+		setTimeout(resetPlayerRound, 500);
+	};
+	
+	const determinePlayers = player => {
+		const players = {};
+		if(player.id === playerOne.id) {
+			players.thisPlayer = {...playerOne};
+			players.nextPlayer = {...playerTwo};
+			players.thisPlayerFunc = setPlayerOne;
+			players.nextPlayerFunc = setPlayerTwo;
+		}
+		else {
+			players.thisPlayer = {...playerTwo};
+			players.nextPlayer = {...playerOne};
+			players.thisPlayerFunc = setPlayerTwo;
+			players.nextPlayerFunc = setPlayerOne;
+		}
+		return players;
+	};
+	
+	const endTurn = player => {
+		console.log(`${player.name} is ending their turn.`);
+		const { thisPlayer, nextPlayer, thisPlayerFunc, nextPlayerFunc } = determinePlayers(player);
+		thisPlayer.isTurn = false;
+		nextPlayer.isTurn = true;
+		thisPlayerFunc(thisPlayer);
+		nextPlayerFunc(nextPlayer);
+		if(!nextPlayer.didStand || !nextPlayer.isBust) {
+			console.log('About to draw card for next player.');
+			drawCard(nextPlayer);
+		} else if(nextPlayer.didStand || nextPlayer.isBust) {
+			console.log('About to draw another card.');
+			drawCard(thisPlayer);
+		} else {
+			endRound();
+		}
+	};
+	
+	const standRound = player => {
+		console.log(`${player.name} is standing.`);
+		const { thisPlayer, nextPlayer, thisPlayerFunc, nextPlayerFunc } = determinePlayers(player);
+		thisPlayer.isTurn = false;
+		nextPlayer.isTurn = true;
+		thisPlayer.didStand = true;
+		thisPlayerFunc(thisPlayer);
+		nextPlayerFunc(nextPlayer);
+		if(!nextPlayer.didStand || !nextPlayer.isBust) {
+			console.log('About to draw card for next player.');
+			drawCard(nextPlayer);
+		} else {
+			endRound();
+		}
+	};
+	
+	const processAITurn = player => {
+		if(!player.isUser && player.isTurn) {
+			const aiPlayer = {...player};
+			if(!playerOne.isBust && playerOne.roundScore >= aiPlayer.roundScore && aiPlayer.roundScore < 16) endTurn(aiPlayer);
+			else standRound(aiPlayer);
+		}
+	};
+	
 	
 	const players = [playerOne, playerTwo];
 	
@@ -76,8 +168,12 @@ function GameArea(props) {
 				<GameButton disabled={gameStarted} onClick={startGame} name={'Start'}/>
 			</Col>
 			{players.map((player, index) => {
-				return <PlayingSpace isStarted={gameStarted}
+				return <PlayingSpace key={"Playing_space_" + index}
+				                     gameStarted={gameStarted}
 				                     roundsPlayed={roundsPlayed}
+				                     processAITurn={() => processAITurn(player)}
+				                     endTurn={() => endTurn(player)}
+				                     standRound={() => standRound(player)}
 				                     drawCard={() => drawCard(player)}
 				                     player={player}/>
 			})}

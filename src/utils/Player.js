@@ -1,5 +1,8 @@
+import uid from 'uid';
+
 export default class Player {
 	constructor(isUser, name) {
+		this.id = uid();
 		this.isUser = isUser;
 		this.name = name;
 		// to implement a more RPG style
@@ -14,6 +17,7 @@ export default class Player {
 		this.streetwise = 0; // adds an overall luck boost to all stats (potential advantage rolls, no repercussions)
 		// base
 		this.isTurn = false;
+		this.didStand = false;
 		this.isBust = false;
 		this.isPlayerOne = false;
 		this.roundScore = 0;
@@ -34,15 +38,5 @@ export default class Player {
 			{ card: {}, hasCard: false},
 			{ card: {}, hasCard: false},
 		]
-	}
-	
-	hasWon() {
-		return this.roundWins >= 3;
-	}
-	
-	determineScore() {
-		let value = 0;
-		this.valuesInPlay.forEach(val => value += val);
-		return value;
 	}
 }
