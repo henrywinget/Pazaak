@@ -13,7 +13,7 @@ const tests = {
 	players: [],
 };
 
-const testUser = new Player(true, 'Mr Awesome');
+const testUser = new Player(true, 'Mr Awesome', true);
 const testOpponent = new Player(false, 'Mr. Goingdown');
 
 testUser.sideDeck = tests.allCardTypes;

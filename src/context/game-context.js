@@ -1,10 +1,9 @@
 import { createContext } from 'react';
-
+import { shuffle } from "../utils/gameFuncs";
 export default createContext({
-		// playerOne will always go first
 	playerOne: {},
 	playerTwo: {},
-	deck: [],
+	deck: shuffle(),
 	roundsPlayed: 0,
 	winningPlayer: {},
 	gameStarted: false,

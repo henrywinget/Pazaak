@@ -1,7 +1,7 @@
 import uid from 'uid';
 
 export default class Player {
-	constructor(isUser, name) {
+	constructor(isUser, name, isPlayerOne = false) {
 		this.id = uid();
 		this.isUser = isUser;
 		this.name = name;
@@ -19,7 +19,7 @@ export default class Player {
 		this.isTurn = false;
 		this.didStand = false;
 		this.isBust = false;
-		this.isPlayerOne = false;
+		this.isPlayerOne = isPlayerOne;
 		this.roundScore = 0;
 		this.roundWins = 0;
 		this.valuesInPlay =  [];

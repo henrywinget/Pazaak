@@ -1,30 +1,43 @@
-import React, { useState, useReducer } from 'react';
+import React, { useReducer } from 'react';
 
-import { gameReducer, SHUFFLE_DECK, DRAW_CARD } from "./reducers";
-
+import {
+	gameReducer,
+	SHUFFLE_DECK,
+	DRAW_CARD,
+	PROCESS_AI_TURN,
+	END_ROUND,
+	STAND_ROUND,
+	END_TURN,
+	RESET_ROUND,
+	START_GAME,
+	DETERMINE_PLAYER_ONE,
+} from "./reducers";
+import tests from "../utils/tests";
+import { shuffle } from "../utils/gameFuncs";
 import GameContext from './game-context';
 
 const initialState = {
-	playerOne: {},
-	playerTwo: {},
-	deck: [],
+	playerOne: tests.players[0],
+	playerTwo: tests.players[1],
+	deck: shuffle(),
 	roundsPlayed: 0,
 	winningPlayer: {},
 	gameStarted: false
 };
 
-function GameState(props) {
+const GameState = props => {
 	
 	const [gameState, dispatch] = useReducer(gameReducer, initialState);
 	
-	const shuffleCards = () => {
-		dispatch({type: SHUFFLE_DECK});
-	};
-	
-	const drawCard = player => {
-		dispatch({type: DRAW_CARD, player })
-	};
-	
+	const startGame = () => dispatch({type: START_GAME});
+	const shuffleCards = () => dispatch({type: SHUFFLE_DECK});
+	const drawCard = player => dispatch({type: DRAW_CARD, player });
+	const standRound = player => dispatch({type: STAND_ROUND, player });
+	const endTurn = player => dispatch({type: END_TURN, player });
+	const resetRound = () => dispatch({type: RESET_ROUND});
+	const endRound = () => dispatch({type: END_ROUND});
+	const processAITurn = player => dispatch({type: PROCESS_AI_TURN, player });
+	const determinePlayerOne = () => dispatch({type: DETERMINE_PLAYER_ONE });
 	
 	return (
 		<GameContext.Provider value={{
@@ -34,6 +47,15 @@ function GameState(props) {
 			gameStarted: gameState.gameStarted,
 			playerOne: gameState.playerOne,
 			playerTwo: gameState.playerTwo,
+			shuffleCards,
+			drawCard,
+			standRound,
+			endTurn,
+			resetRound,
+			endRound,
+			processAITurn,
+			startGame,
+			determinePlayerOne,
 		}}>
 			{props.children}
 		</GameContext.Provider>

@@ -20,7 +20,7 @@ GameUX.propTypes = {
 
 function GameUX({ wins, isUser, isTurn, didStand, roundScore, standRound, gameStarted, endTurn, processAITurn }) {
 	useEffect(()=> {
-		if(!isUser && isTurn && !didStand) {
+		if(!isUser && isTurn && !didStand && gameStarted) {
 			console.log('Processing AI turn...');
 			setTimeout(processAITurn, 1000);
 		}

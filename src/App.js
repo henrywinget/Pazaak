@@ -3,14 +3,17 @@ import './App.scss';
 import 'antd/dist/antd.css';
 import { Layout } from 'antd';
 import { Row, Col, Space } from 'antd';
+import GameState from "./context/GameState";
 
 import GameArea from "./components/GameArea/GameArea";
 import PlayingSpace from "./components/PlayingSpace/PlayingSpace";
 import PazaakCard from "./components/PazaakCard";
 import tests from "./utils/tests";
 import Game from "./utils/Game";
+import GameContext from "./context/game-context";
 
 function App() {
+  
   const [phase, setPhase] = useState('play');
 
   const { Header, Footer, Sider, Content } = Layout;
@@ -20,7 +23,11 @@ function App() {
     <div className="App">
       <Layout style={{ minHeight: '100vh' }}>
         <Content className="game-content">
-            <GameArea/>
+            <GameState>
+                <GameContext.Consumer>
+                    {(context) => <GameArea/>}
+                </GameContext.Consumer>
+            </GameState>
         </Content>
       </Layout>
     </div>
