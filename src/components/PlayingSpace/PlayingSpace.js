@@ -12,10 +12,9 @@ PlayingSpace.propTypes = {
 	gameStarted: PropTypes.bool,
 	endTurn: PropTypes.func,
 	standRound: PropTypes.func,
-	processAITurn: PropTypes.func,
 };
 
-function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted, processAITurn }) {
+function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted }) {
 	const spaceStyle = {
 		padding: '0 25px'
 	};
@@ -30,7 +29,6 @@ function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted, proc
 			        endTurn={endTurn}
 			        standRound={standRound}
 			        gameStarted={gameStarted}
-			        processAITurn={processAITurn}
 			        didStand={player.didStand}
 			        isTurn={player.isTurn}
 			        isUser={player.isUser}

@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 
 import PropTypes from "prop-types";
 import { Col, Row } from "antd";
 import GameButton from "../GameButton";
 
 import './GameUX.scss';
+import { endTurn } from "../../context/reducers";
+import GameContext from "../../context/game-context";
 
 GameUX.propTypes = {
 	wins: PropTypes.number,
@@ -18,12 +20,23 @@ GameUX.propTypes = {
 	
 };
 
-function GameUX({ wins, isUser, isTurn, didStand, roundScore, standRound, gameStarted, endTurn, processAITurn }) {
+function GameUX({ wins, isUser, isTurn, didStand, roundScore, standRound, gameStarted, endTurn}) {
+	const context = useContext(GameContext);
+	const processAILogic = () => {
+		if(!context.playerOne.isBust && context.playerOne.roundScore >= roundScore && roundScore < 16) {
+			endTurn();
+		} else {
+			console.log(context);
+			standRound();
+		}
+	};
+	
 	useEffect(()=> {
 		if(!isUser && isTurn && !didStand && gameStarted) {
 			console.log('Processing AI turn...');
-			setTimeout(processAITurn, 1000);
+			setTimeout(processAILogic, 1000);
 		}
+		
 	}, [isTurn]);
 	
 	const scoreAreaStyle = {

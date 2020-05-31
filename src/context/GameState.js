@@ -4,10 +4,8 @@ import {
 	gameReducer,
 	SHUFFLE_DECK,
 	DRAW_CARD,
-	PROCESS_AI_TURN,
 	END_ROUND,
 	STAND_ROUND,
-	END_TURN,
 	RESET_ROUND,
 	START_GAME,
 	DETERMINE_PLAYER_ONE,
@@ -33,10 +31,8 @@ const GameState = props => {
 	const shuffleCards = () => dispatch({type: SHUFFLE_DECK});
 	const drawCard = player => dispatch({type: DRAW_CARD, player });
 	const standRound = player => dispatch({type: STAND_ROUND, player });
-	const endTurn = player => dispatch({type: END_TURN, player });
 	const resetRound = () => dispatch({type: RESET_ROUND});
 	const endRound = () => dispatch({type: END_ROUND});
-	const processAITurn = player => dispatch({type: PROCESS_AI_TURN, player });
 	const determinePlayerOne = () => dispatch({type: DETERMINE_PLAYER_ONE });
 	
 	return (
@@ -50,10 +46,8 @@ const GameState = props => {
 			shuffleCards,
 			drawCard,
 			standRound,
-			endTurn,
 			resetRound,
 			endRound,
-			processAITurn,
 			startGame,
 			determinePlayerOne,
 		}}>

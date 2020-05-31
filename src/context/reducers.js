@@ -3,10 +3,8 @@ import { drawSpace, shuffle } from "../utils/gameFuncs";
 
 export const SHUFFLE_DECK = "SHUFFLE_DECK";
 export const DRAW_CARD = "DRAW_CARD";
-export const END_TURN = "END_TURN";
 export const STAND_ROUND = "STAND_ROUND";
 export const RESET_ROUND = "RESET_ROUND";
-export const PROCESS_AI_TURN = "PROCESS_AI_TURN";
 export const END_ROUND = "END_ROUND";
 export const START_GAME = "START_GAME";
 export const DETERMINE_PLAYER_ONE = "DETERMINE_PLAYER_ONE";
@@ -81,58 +79,15 @@ export const shuffleCards = state => {
 	return { ...state, deck: shuffle()};
 };
 
-export const endTurn = (player, state) => {
-	console.log(`${player.name} is ending their turn.`);
-	const { thisPlayer, nextPlayer, thisPlayerKey, nextPlayerKey } = determinePlayers(player, state);
-
-	if(!nextPlayer.didStand || !nextPlayer.isBust) {
-		console.log('About to draw card for next player.');
-		drawCard(nextPlayer, {
-			...state,
-			[thisPlayerKey]: {
-				...thisPlayer,
-				isTurn: false,
-			},
-			[nextPlayerKey]: {
-				...nextPlayer,
-				isTurn: false,
-			}
-		});
-	} else if(nextPlayer.didStand || nextPlayer.isBust) {
-		console.log('About to draw another card.');
-		drawCard(thisPlayer, {
-			...state,
-			[thisPlayerKey]: {
-				...thisPlayer,
-				isTurn: false,
-			},
-			[nextPlayerKey]: {
-				...nextPlayer,
-				isTurn: false,
-			}
-		});
-	} else {
-		endRound();
-	}
-	return {
-		...state,
-		[thisPlayerKey]: {
-			...thisPlayer,
-			isTurn: false,
-		},
-		[nextPlayerKey]: {
-			...nextPlayer,
-			isTurn: false,
-		}
-	}
-};
-
 export const drawCard = (player, state) => {
 	console.log(`${player.name} is drawing a card.`);
 	const cards = [...state.deck];
 	const cardDrawn = cards.shift();
+	let { roundScore } = player;
+	roundScore += cardDrawn.number;
 	let isBust = false;
 	let playerKey = player.isPlayerOne ? 'playerOne' : 'playerTwo';
+	const { nextPlayerKey, nextPlayer } = determinePlayers(player, state);
 	const valuesInPlay = [...player.valuesInPlay];
 	const playerDrawSpace = [...player.drawSpace];
 	valuesInPlay.push(cardDrawn);
@@ -143,17 +98,20 @@ export const drawCard = (player, state) => {
 	if(player.roundScore > 20) {
 		isBust = true;
 	}
-	console.log(player.roundScore);
 	return {
 		...state,
 		deck: cards,
 		[playerKey]: {
 			...player,
 			isTurn: true,
-			roundScore: player.roundScore += cardDrawn.number,
+			roundScore,
 			isBust,
 			valuesInPlay,
 			drawSpace: playerDrawSpace,
+		},
+		[nextPlayerKey]: {
+			...nextPlayer,
+			isTurn: false
 		},
 		gameStarted: true,
 	}
@@ -179,39 +137,16 @@ export const endRound = state => {
 
 export const standRound = (player, state) => {
 	console.log(`${player.name} is standing.`);
-	const { thisPlayer, nextPlayer, thisPlayerKey, nextPlayerKey } = determinePlayers(player, state);
-	if(!nextPlayer.didStand || !nextPlayer.isBust) {
-		console.log('About to draw card for next player.');
-		drawCard(nextPlayer, {
-			...state,
-			[thisPlayerKey]: {
-				...thisPlayer,
-				isTurn: false,
-				didStand: true,
-			},
-			[nextPlayerKey]: {
-				...nextPlayer,
-				isTurn: true,
-			},
-		});
-	} else {
-		endRound();
-	}
+	const { thisPlayer,  thisPlayerKey } = determinePlayers(player, state);
 	return {
 		...state,
-		[thisPlayerKey]: thisPlayer,
-		[nextPlayerKey]: nextPlayer,
+		[thisPlayerKey]: {
+			...thisPlayer,
+			didStand: true,
+		},
 	}
 };
 
-export const processAITurn = (player, state) => {
-	if(!player.isUser && player.isTurn) {
-		const aiPlayer = {...player};
-		if(!state.playerOne.isBust && state.playerOne.roundScore >= aiPlayer.roundScore && aiPlayer.roundScore < 16) endTurn(aiPlayer, state);
-		else standRound(aiPlayer, state);
-	}
-	
-};
 
 export const gameReducer = (state, action) => {
 	switch(action.type) {
@@ -219,12 +154,8 @@ export const gameReducer = (state, action) => {
 			return shuffleCards(state);
 		case DRAW_CARD:
 			return drawCard(action.player, state);
-		case END_TURN:
-			return endTurn(action.player, state);
 		case STAND_ROUND:
 			return standRound(action.player, state);
-		case PROCESS_AI_TURN:
-			return processAITurn(action.player, state);
 		case RESET_ROUND:
 			return resetPlayerRound(state);
 		case END_ROUND:
