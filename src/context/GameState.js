@@ -22,6 +22,7 @@ const initialState = {
 	winningPlayer: {},
 	gameStarted: false,
 	playerStood: false,
+	playerIsBust: false,
 };
 
 const GameState = props => {
@@ -45,6 +46,7 @@ const GameState = props => {
 			playerOne: gameState.playerOne,
 			playerTwo: gameState.playerTwo,
 			playerStood: gameState.playerStood,
+			playerIsBust: gameState.playerIsBust,
 			shuffleCards,
 			drawCard,
 			standRound,

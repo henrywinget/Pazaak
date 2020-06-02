@@ -5,6 +5,7 @@ export default createContext({
 	playerTwo: {},
 	deck: shuffle(),
 	playerStood: false,
+	playerIsBust: false,
 	roundsPlayed: 0,
 	winningPlayer: {},
 	gameStarted: false,
