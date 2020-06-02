@@ -20,7 +20,8 @@ const initialState = {
 	deck: shuffle(),
 	roundsPlayed: 0,
 	winningPlayer: {},
-	gameStarted: false
+	gameStarted: false,
+	playerStood: false,
 };
 
 const GameState = props => {
@@ -43,6 +44,7 @@ const GameState = props => {
 			gameStarted: gameState.gameStarted,
 			playerOne: gameState.playerOne,
 			playerTwo: gameState.playerTwo,
+			playerStood: gameState.playerStood,
 			shuffleCards,
 			drawCard,
 			standRound,

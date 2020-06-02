@@ -23,7 +23,7 @@ GameUX.propTypes = {
 function GameUX({ wins, isUser, isTurn, didStand, roundScore, standRound, gameStarted, endTurn}) {
 	const context = useContext(GameContext);
 	const processAILogic = () => {
-		if(!context.playerOne.isBust && context.playerOne.roundScore >= roundScore && roundScore < 16) {
+		if(!context.playerOne.isBust && (context.playerOne.roundScore >= roundScore || roundScore < 16)) {
 			endTurn();
 		} else {
 			console.log(context);
@@ -37,7 +37,7 @@ function GameUX({ wins, isUser, isTurn, didStand, roundScore, standRound, gameSt
 			setTimeout(processAILogic, 1000);
 		}
 		
-	}, [isTurn]);
+	}, [isTurn, processAILogic, isUser, didStand]);
 	
 	const scoreAreaStyle = {
 		display: 'flex',

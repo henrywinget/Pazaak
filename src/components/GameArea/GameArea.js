@@ -35,12 +35,16 @@ function GameArea(props) {
 	};
 	
 	useEffect(() => {
-		if(context.playerOne.didStand) {
-			handleStandLogic(context.playerOne, context.playerTwo);
-		} else if(context.playerTwo.didStand) {
-			handleStandLogic(context.playerTwo, context.playerOne);
+		if(context.playerStood) {
+			if(context.playerOne.didStand && !context.playerTwo.didStand) {
+				handleStandLogic(context.playerOne, context.playerTwo);
+			} else if(context.playerTwo.didStand && !context.playerOne.didStand) {
+				handleStandLogic(context.playerTwo, context.playerOne);
+			} else {
+				context.endRound();
+			}
 		}
-	}, [context.playerOne.didStand, context.playerTwo.didStand]);
+	}, [context.playerStood, handleStandLogic, context.playerOne, context.playerTwo]);
 	
 	const startGame = () => {
 		if(context.playerOne.isTurn) {
@@ -55,23 +59,29 @@ function GameArea(props) {
 		if(id === context.playerOne.id) {
 			players.thisPlayer = {...context.playerOne};
 			players.nextPlayer = {...context.playerTwo};
+			players.thisPlayerKey = 'playerOne';
+			players.nextPlayerKey = 'playerTwo';
 		}
 		else {
 			players.thisPlayer = {...context.playerTwo};
 			players.nextPlayer = {...context.playerOne};
+			players.thisPlayerKey = 'playerTwo';
+			players.nextPlayerKey = 'playerOne';
 		}
-		players.thisPlayerKey = players.isPlayerOne ? 'playerOne' : 'playerTwo';
-		players.nextPlayerKey = !players.isPlayerOne ? 'playerOne' : 'playerTwo';
 		return players;
 	};
 	
 	const endTurn = player => {
 		console.log(`${player.name} is ending their turn.`)
 		const { thisPlayer, nextPlayer } = determinePlayers(player.id);
-		if(!nextPlayer.didStand || !nextPlayer.isBust) {
+		console.log(nextPlayer.name)
+		console.log(!nextPlayer.didStand);
+		console.log(!nextPlayer.isBust);
+		console.log(!nextPlayer.didStand || !nextPlayer.isBust)
+		if(!nextPlayer.isBust || !nextPlayer.didStand) {
 			console.log('About to draw card for next player.');
 			context.drawCard(nextPlayer);
-		} else if(nextPlayer.didStand || nextPlayer.isBust) {
+		} else if(nextPlayer.isBust || nextPlayer.didStand) {
 			console.log('About to draw another card.');
 			context.drawCard(thisPlayer);
 		} else {
@@ -80,6 +90,7 @@ function GameArea(props) {
 	};
 	
 	const standRound = player => {
+		
 		context.standRound(player);
 	};
 	
