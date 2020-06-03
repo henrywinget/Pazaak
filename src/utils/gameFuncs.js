@@ -24,7 +24,48 @@ export const drawSpace = () => {
 	]
 };
 
+export const determineCardScore = (score, { number, type, specialType }) => {
+	let num = 0;
+	switch(type) {
+		case "+":
+			num = score + number;
+			break;
+		case "-":
+			num = score - number;
+			break;
+		case "177":
+			if(specialType === "+") {
+				num = score + number;
+			} else if (specialType === "-") {
+				num = score - number;
+			}
+			break;
+		default:
+			console.log('Unable to determine type for card.');
+	}
+	return num;
+};
+
+export const determinePlayers = (player, state) => {
+	const players = {};
+	const id = typeof player === 'object' ? player.id : player;
+	if(id === state.playerOne.id) {
+		players.thisPlayer = {...state.playerOne};
+		players.nextPlayer = {...state.playerTwo};
+		players.thisPlayerKey = 'playerOne';
+		players.nextPlayerKey = 'playerTwo';
+	}
+	else {
+		players.thisPlayer = {...state.playerTwo};
+		players.nextPlayer = {...state.playerOne};
+		players.thisPlayerKey = 'playerTwo';
+		players.nextPlayerKey = 'playerOne';
+	}
+	return players;
+};
+
 export default {
 	shuffle,
 	drawSpace,
+	determinePlayers,
 };

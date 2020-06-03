@@ -1,12 +1,12 @@
 import uid from 'uid';
 
 export default class Player {
-	constructor(isUser, name, isPlayerOne = false) {
-		this.id = uid();
+	constructor(isUser, name) {
+		this.id = uid(18);
 		this.isUser = isUser;
 		this.name = name;
 		// to implement a more RPG style
-		this.cool = 0; // used to determine who goes first (no repercussions)
+		this.cool = 0; // used to determine who goes first, higher cool less likely chance of going first (no repercussions)
 		this.coercion = 0; // used to bait the opponent into holding out for one more card when they would otherwise stand (no repercussions)
 		this.deception = 0; // used to attempt to get out of repercussions if caught cheating to avoid loss stat and money loss
 		this.negotiation = 0; // used to negotiate higher bids and bribe if caught cheating to avoid a loss stat
@@ -19,7 +19,8 @@ export default class Player {
 		this.isTurn = false;
 		this.didStand = false;
 		this.isBust = false;
-		this.isPlayerOne = isPlayerOne;
+		this.isPlayerOne = false; // just to remember who went first in the game!!
+		this.playedCardThisRound = false;
 		this.roundScore = 0;
 		this.roundWins = 0;
 		this.valuesInPlay =  [];

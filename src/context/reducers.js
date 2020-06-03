@@ -1,4 +1,4 @@
-import { drawSpace, shuffle } from "../utils/gameFuncs";
+import { drawSpace, shuffle, determinePlayers } from "../utils/gameFuncs";
 
 export const SHUFFLE_DECK = "SHUFFLE_DECK";
 export const DRAW_CARD = "DRAW_CARD";
@@ -8,23 +8,6 @@ export const END_ROUND = "END_ROUND";
 export const START_GAME = "START_GAME";
 export const DETERMINE_PLAYER_ONE = "DETERMINE_PLAYER_ONE";
 export const PLAY_SIDE_CARD = "PLAY_SIDE_CARD";
-
-const determinePlayers = (player, state) => {
-	const players = {};
-	if(player.id === state.playerOne.id) {
-		players.thisPlayer = {...state.playerOne};
-		players.nextPlayer = {...state.playerTwo};
-		players.thisPlayerKey = 'playerOne';
-		players.nextPlayerKey = 'playerTwo';
-	}
-	else {
-		players.thisPlayer = {...state.playerTwo};
-		players.nextPlayer = {...state.playerOne};
-		players.thisPlayerKey = 'playerTwo';
-		players.nextPlayerKey = 'playerOne';
-	}
-	return players;
-};
 
 export const determinePlayerOne = state => {
 	console.log('Determining player');
@@ -40,10 +23,12 @@ export const determinePlayerOne = state => {
 		...state,
 		playerOne: {
 			...playerOneClone,
+			isPlayerOne: coin === 1,
 			isTurn: coin === 1,
 		},
 		playerTwo: {
 			...playerTwoClone,
+			isPlayerOne: coin !== 1,
 			isTurn: coin !== 1,
 		},
 	}
@@ -76,12 +61,12 @@ export const resetPlayerRound = state => {
 	}
 };
 
-export const playSideCard = (cardPlayed, player, state) => {
-	const { thisPlayerKey, thisPlayer } = determinePlayers(player, state);
-	const valuesInPlay = [...player.valuesInPlay];
-	const drawSpace = [...player.drawSpace];
-	const sideDeckInPlay = [...player.sideDeckInPlay];
-	let { roundScore } = player;
+export const playSideCard = (cardPlayed, playerId, state) => {
+	const { thisPlayerKey, thisPlayer } = determinePlayers(playerId, state);
+	const valuesInPlay = [...thisPlayer.valuesInPlay];
+	const drawSpace = [...thisPlayer.drawSpace];
+	const sideDeckInPlay = [...thisPlayer.sideDeckInPlay];
+	let { roundScore } = thisPlayer;
 	let { type, specialType, number, id } = cardPlayed;
 	switch(type) {
 		case "+":
@@ -112,7 +97,6 @@ export const playSideCard = (cardPlayed, player, state) => {
 			card.isPlayed = true;
 		}
 	});
-	
 	return {
 		...state,
 		[thisPlayerKey]: {
@@ -121,6 +105,8 @@ export const playSideCard = (cardPlayed, player, state) => {
 			valuesInPlay,
 			sideDeckInPlay,
 			drawSpace,
+			isBust: roundScore > 20,
+			playedCardThisRound: true,
 		}
 	}
 	
@@ -135,7 +121,11 @@ export const drawCard = (player, state) => {
 	// this is all a little more complicated than it might need to be
 	// I tried having it a little more optimized, but it didn't work right
 	console.log(`${player.name} is drawing a card with a ${player.roundScore}`);
-	const cards = [...state.deck];
+	let cards = [...state.deck];
+	if(cards.length === 0) {
+		console.log('Shuffling cards.');
+		cards = shuffle();
+	}
 	const cardDrawn = cards.shift();
 	let { roundScore } = player;
 	roundScore += cardDrawn.number;
@@ -148,17 +138,17 @@ export const drawCard = (player, state) => {
 		drawSpace[index].card = card;
 		drawSpace[index].hasCard = true;
 	});
-	if(player.roundScore > 20) {
+	if(roundScore > 20) {
 		isBust = true;
 	}
 	return {
 		...state,
 		deck: cards,
 		playerStood: false,
-		playerIsBust: isBust,
 		[thisPlayerKey]: {
 			...player,
 			isTurn: true,
+			playedCardThisRound: false,
 			roundScore,
 			isBust,
 			valuesInPlay,
@@ -166,7 +156,8 @@ export const drawCard = (player, state) => {
 		},
 		[nextPlayerKey]: {
 			...nextPlayer,
-			isTurn: false
+			isTurn: false,
+			playedCardThisRound: false,
 		},
 		gameStarted: true,
 	}
@@ -213,7 +204,7 @@ export const endRound = state => {
 			roundScore: 0,
 			roundWins: secondPlayerScore,
 		},
-		roundsPlayed: state.roundsPlayed++,
+		roundsPlayed: state.roundsPlayed + 1,
 		gameStarted: false,
 		playerStood: false,
 	}
@@ -228,6 +219,7 @@ export const standRound = (player, state) => {
 		[thisPlayerKey]: {
 			...thisPlayer,
 			didStand: true,
+			playedCardThisRound: false,
 			isBust: thisPlayer.roundScore > 20,
 		},
 	}

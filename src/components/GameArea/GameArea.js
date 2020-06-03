@@ -7,6 +7,8 @@ import './GameArea.scss';
 import tests from "../../utils/tests";
 import PlayingSpace from "../PlayingSpace/PlayingSpace";
 
+import { determinePlayers } from "../../utils/gameFuncs";
+
 GameArea.propTypes = {
 
 };
@@ -49,26 +51,9 @@ function GameArea() {
 		}
 	};
 	
-	const determinePlayers = id => {
-		const players = {};
-		if(id === context.playerOne.id) {
-			players.thisPlayer = {...context.playerOne};
-			players.nextPlayer = {...context.playerTwo};
-			players.thisPlayerKey = 'playerOne';
-			players.nextPlayerKey = 'playerTwo';
-		}
-		else {
-			players.thisPlayer = {...context.playerTwo};
-			players.nextPlayer = {...context.playerOne};
-			players.thisPlayerKey = 'playerTwo';
-			players.nextPlayerKey = 'playerOne';
-		}
-		return players;
-	};
-	
 	const endTurn = player => {
 		console.log(`${player.name} is ending their turn.`);
-		const { thisPlayer, nextPlayer } = determinePlayers(player.id);
+		const { thisPlayer, nextPlayer } = determinePlayers(player.id, context);
 		if(nextPlayer.didStand) {
 			context.drawCard(thisPlayer);
 		} else {

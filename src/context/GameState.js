@@ -23,7 +23,6 @@ const initialState = {
 	winningPlayer: {},
 	gameStarted: false,
 	playerStood: false,
-	playerIsBust: false,
 };
 
 const GameState = props => {

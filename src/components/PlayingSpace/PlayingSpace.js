@@ -25,6 +25,8 @@ function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted }) {
 		     lg={{ span: 12, order: player.isUser ? 0 : 1 }}>
 			<Divider orientation={player.isUser ? "left" : "right"}>{player.name}</Divider>
 			<GameUX roundWins={player.roundWins}
+			        sideDeck={player.sideDeckInPlay}
+			        playerId={player.id}
 			        drawCard={drawCard}
 			        endTurn={endTurn}
 			        standRound={standRound}
@@ -32,6 +34,8 @@ function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted }) {
 			        didStand={player.didStand}
 			        isTurn={player.isTurn}
 			        isUser={player.isUser}
+			        isBust={player.isBust}
+			        playedCardThisRound={player.playedCardThisRound}
 			        roundScore={player.roundScore}
 			/>
 			<DrawArea drawSpace={player.drawSpace}

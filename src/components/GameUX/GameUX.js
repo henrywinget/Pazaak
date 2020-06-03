@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 import { Col, Row } from "antd";
 import GameButton from "../GameButton";
+import { determineCardScore } from "../../utils/gameFuncs";
 
 import './GameUX.scss';
 
@@ -18,15 +19,52 @@ GameUX.propTypes = {
 	roundWins: PropTypes.number,
 };
 
-function GameUX({ isUser, isTurn, didStand, roundScore, standRound, gameStarted, endTurn, roundWins}) {
+function GameUX({ isBust, isUser, isTurn, didStand, roundScore, standRound, gameStarted, endTurn, roundWins, sideDeck, playerId, playedCardThisRound }) {
 	// all games state
 	const context = useContext(GameContext);
 	
+	const processAISideDeck = () => {
+		console.log('Analyzing side deck...');
+		let hasCardToPlay = false;
+		let bestCard = { number: 0, type: '+', specialType: '+' };
+		const { playerOne } = context;
+		sideDeck.forEach((card) => {
+			if(!hasCardToPlay && !card.isPlayed && !playedCardThisRound) {
+				const potentialScore = determineCardScore(roundScore, card);
+				console.log(`Best card: ${determineCardScore(roundScore, bestCard)} vs: ${potentialScore}`);
+				if(potentialScore === 20) {
+					bestCard = card;
+					hasCardToPlay = true;
+				} else if(isBust && potentialScore < 20 && determineCardScore(roundScore, bestCard) < potentialScore) {
+					bestCard = card;
+					hasCardToPlay = true;
+				} else if(playerOne.didStand
+					&& !playerOne.isBust
+					&& (potentialScore < 20
+						&& potentialScore > playerOne.roundScore
+						&& determineCardScore(roundScore, bestCard) < potentialScore)) {
+					bestCard = card;
+					hasCardToPlay = true;
+				}
+			}
+		});
+		// console.log(isBust)
+		// console.log(bestCard);
+		// console.log(sideDeck);
+		if(hasCardToPlay) {
+			context.playSideCard(bestCard, playerId);
+			
+			console.log(`Playing a ${bestCard.type !== "177" ? bestCard.type : bestCard.specialType}${bestCard.number} to make score ${roundScore + bestCard.number}`);
+		}
+		return hasCardToPlay;
+	};
 	
 	const processAILogic = () => {
 		// this might be a little redundant but what are you gonna do, it's me
 		if(roundScore === 20 || context.playerOne.isBust) {
 			standRound(); // always stand here
+		} else if (processAISideDeck()) {
+			console.log('Playing card.')
 		} else if(context.playerOne.didStand && roundScore === context.playerOne.roundScore) {
 			standRound(); // kind of tricky, but you should still stand
 		} else if(context.playerOne.roundScore > roundScore || roundScore < 16) {

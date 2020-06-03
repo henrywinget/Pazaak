@@ -21,7 +21,7 @@ function SideDeck({ player }) {
 						<PazaakCard isFaceDown={!player.isUser}
 						            isPlayed={card.isPlayed}
 						            number={card.number}
-						            onClick={() => context.playSideCard(card, player)}
+						            onClick={() => !player.playedCardThisRound ? context.playSideCard(card, player) : null}
 						            type={card.type}/>
 					</CardSpace>
 				</Col>
