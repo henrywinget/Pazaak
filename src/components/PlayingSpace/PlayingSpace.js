@@ -24,7 +24,7 @@ function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted }) {
 		     xs={{ span: 24, order: player.isUser ? 1 : 0 }}
 		     lg={{ span: 12, order: player.isUser ? 0 : 1 }}>
 			<Divider orientation={player.isUser ? "left" : "right"}>{player.name}</Divider>
-			<GameUX wins={player.roundWins}
+			<GameUX roundWins={player.roundWins}
 			        drawCard={drawCard}
 			        endTurn={endTurn}
 			        standRound={standRound}

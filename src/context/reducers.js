@@ -82,7 +82,7 @@ export const shuffleCards = state => {
 };
 
 export const drawCard = (player, state) => {
-	console.log(`${player.name} is drawing a card.`);
+	console.log(`${player.name} is drawing a card with a ${player.roundScore}`);
 	const cards = [...state.deck];
 	const cardDrawn = cards.shift();
 	let { roundScore } = player;
@@ -124,30 +124,51 @@ export const endRound = state => {
 	console.log(`Round over.`);
 	const firstPlayer = {...state.playerOne};
 	const secondPlayer = {...state.playerTwo};
+	let firstPlayerScore = firstPlayer.roundWins;
+	let secondPlayerScore = secondPlayer.roundWins;
+	
+	if(firstPlayer.roundScore <= 20 && secondPlayer.roundScore <= 20) {
+		if(firstPlayer.roundScore > secondPlayer.roundScore) {
+			firstPlayerScore++;
+		} else if (secondPlayer.roundScore > firstPlayer.roundScore) {
+			secondPlayerScore++;
+		}
+	} else if(firstPlayer.roundScore > 20 && secondPlayer.roundScore <= 20) {
+		secondPlayerScore++;
+	} else if (secondPlayer.roundScore > 20 && firstPlayer.roundScore <= 20) {
+		firstPlayerScore++;
+	}
+	
 	return {
 		...state,
 		playerOne: {
 			...firstPlayer,
 			didStand: false,
+			isTurn: !firstPlayer.isTurn,
 			isBust: false,
 			valuesInPlay: [],
 			drawSpace: drawSpace(),
-			roundWins: firstPlayer.roundScore < secondPlayer.roundScore ? firstPlayer.roundWins++ : firstPlayer.roundWins,
+			roundScore: 0,
+			roundWins: firstPlayerScore,
 		},
 		playerTwo: {
 			...secondPlayer,
 			didStand: false,
+			isTurn: !secondPlayer.isTurn,
 			isBust: false,
 			valuesInPlay: [],
 			drawSpace: drawSpace(),
-			roundWins: firstPlayer.roundScore > secondPlayer.roundScore? secondPlayer.roundWins++ : secondPlayer.roundWins,
+			roundScore: 0,
+			roundWins: secondPlayerScore,
 		},
 		roundsPlayed: state.roundsPlayed++,
+		gameStarted: false,
+		playerStood: false,
 	}
 };
 
 export const standRound = (player, state) => {
-	console.log(`${player.name} is standing.`);
+	console.log(`${player.name} is standing with a ${player.roundScore}`);
 	const { thisPlayer,  thisPlayerKey, } = determinePlayers(player, state);
 	return {
 		...state,
@@ -155,6 +176,7 @@ export const standRound = (player, state) => {
 		[thisPlayerKey]: {
 			...thisPlayer,
 			didStand: true,
+			isBust: thisPlayer.roundScore > 20,
 		},
 	}
 };

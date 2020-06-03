@@ -9,7 +9,6 @@ import { endTurn } from "../../context/reducers";
 import GameContext from "../../context/game-context";
 
 GameUX.propTypes = {
-	wins: PropTypes.number,
 	isUser: PropTypes.bool,
 	isTurn: PropTypes.bool,
 	gameStarted: PropTypes.bool,
@@ -17,16 +16,23 @@ GameUX.propTypes = {
 	endTurn: PropTypes.func.isRequired,
 	standRound: PropTypes.func.isRequired,
 	didStand: PropTypes.bool,
-	
+	roundWins: PropTypes.number,
 };
 
-function GameUX({ wins, isUser, isTurn, didStand, roundScore, standRound, gameStarted, endTurn}) {
+function GameUX({ isUser, isTurn, didStand, roundScore, standRound, gameStarted, endTurn, roundWins}) {
+	// all games state
 	const context = useContext(GameContext);
+	
+	
 	const processAILogic = () => {
-		if(!context.playerOne.isBust && (context.playerOne.roundScore >= roundScore || roundScore < 16)) {
-			endTurn();
+		if(roundScore === 20 || context.playerOne.isBust) {
+			standRound(); // always stand here
+		} else if(context.playerOne.didStand && roundScore === context.playerOne.roundScore) {
+			standRound(); // kind of tricky, but you should still stand
+		} else if(context.playerOne.roundScore > roundScore || roundScore < 16) {
+			endTurn(); // only end your turn here
 		} else {
-			console.log(context);
+			console.log('Other circumstance');
 			standRound();
 		}
 	};
@@ -52,7 +58,10 @@ function GameUX({ wins, isUser, isTurn, didStand, roundScore, standRound, gameSt
 		alignItems: 'space-between'
 	};
 	
-	const scores = [{ win: false }, { win: false }, { win: false}];
+	const scores = [{ win: false }, { win: false }, { win: false}].map((score, index) => {
+			score.win = index + 1 <= roundWins;
+			return score;
+	});
 	const buttons = [
 			{name: 'End Turn', onClick: endTurn, disabled: !gameStarted || !isTurn},
 			{name: 'Stand', onClick: standRound, disabled: !gameStarted || !isTurn}
@@ -63,7 +72,7 @@ function GameUX({ wins, isUser, isTurn, didStand, roundScore, standRound, gameSt
 			{scores.map((round, index) => {
 			return <div className="score-ball"
 			            key={"Score_ball_" + index}
-			            style={{ background: wins >= index + 1 ? "red" : "white" }}>{' '}</div>
+			            style={{ background: round.win ? "red" : "white" }}>{' '}</div>
 			})}
 		</div>
 	};

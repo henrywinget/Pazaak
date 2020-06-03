@@ -21,13 +21,13 @@ function GameArea(props) {
 	const players = [context.playerOne, context.playerTwo];
 	
 	const handleStandLogic = (playerOne, playerTwo) => {
+		console.log('Detected player stand. Handling state logic.')
 		if(playerOne.didStand) {
-			if(!playerTwo.didStand || !playerTwo.isBust) {
-				console.log('About to draw card for next player.');
+			if(playerTwo.isBust || playerOne.isBust) {
+				context.endRound();
+			}
+			else if(!playerTwo.didStand) {
 				context.drawCard(playerTwo);
-			} else if(playerTwo.didStand || playerTwo.isBust) {
-				console.log('About to draw another card.');
-				context.drawCard(playerOne);
 			} else {
 				context.endRound();
 			}
@@ -72,21 +72,14 @@ function GameArea(props) {
 	};
 	
 	const endTurn = player => {
-		console.log(`${player.name} is ending their turn.`)
+		console.log(`${player.name} is ending their turn.`);
 		const { thisPlayer, nextPlayer } = determinePlayers(player.id);
-		console.log(nextPlayer.name)
-		console.log(!nextPlayer.didStand);
-		console.log(!nextPlayer.isBust);
-		console.log(!nextPlayer.didStand || !nextPlayer.isBust)
-		if(!nextPlayer.isBust || !nextPlayer.didStand) {
-			console.log('About to draw card for next player.');
-			context.drawCard(nextPlayer);
-		} else if(nextPlayer.isBust || nextPlayer.didStand) {
-			console.log('About to draw another card.');
+		if(nextPlayer.didStand) {
 			context.drawCard(thisPlayer);
 		} else {
-			context.endRound();
+			context.drawCard(nextPlayer);
 		}
+
 	};
 	
 	const standRound = player => {
