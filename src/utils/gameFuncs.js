@@ -27,5 +27,4 @@ export const drawSpace = () => {
 export default {
 	shuffle,
 	drawSpace,
-	
 };

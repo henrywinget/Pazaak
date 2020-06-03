@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Col } from 'antd';
+import { Card } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faOldRepublic } from '@fortawesome/free-brands-svg-icons';
 

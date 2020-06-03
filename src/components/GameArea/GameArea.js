@@ -6,17 +6,12 @@ import GameContext from "../../context/game-context";
 import './GameArea.scss';
 import tests from "../../utils/tests";
 import PlayingSpace from "../PlayingSpace/PlayingSpace";
-import Game from "../../utils/Game";
-import Card from "../../utils/Card";
-
-import { shuffle, drawSpace } from "../../utils/gameFuncs";
-import { drawCard, endRound } from "../../context/reducers";
 
 GameArea.propTypes = {
 
 };
 
-function GameArea(props) {
+function GameArea() {
 	const context = useContext(GameContext);
 	const players = [context.playerOne, context.playerTwo];
 	
@@ -82,11 +77,6 @@ function GameArea(props) {
 
 	};
 	
-	const standRound = player => {
-		
-		context.standRound(player);
-	};
-	
 	
 	return (
 		<Row className="game-area">
@@ -98,7 +88,7 @@ function GameArea(props) {
 				                     gameStarted={context.gameStarted}
 				                     roundsPlayed={context.roundsPlayed}
 				                     endTurn={() => endTurn(player)}
-				                     standRound={() => standRound(player)}
+				                     standRound={() => context.standRound(player)}
 				                     drawCard={() => context.drawCard(player)}
 				                     player={player}/>
 			})}

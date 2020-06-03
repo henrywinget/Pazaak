@@ -6,17 +6,13 @@ import { Row, Col, Space } from 'antd';
 import GameState from "./context/GameState";
 import GameContext from "./context/game-context";
 import GameArea from "./components/GameArea/GameArea";
-import PlayingSpace from "./components/PlayingSpace/PlayingSpace";
-import PazaakCard from "./components/PazaakCard";
-import tests from "./utils/tests";
-import Game from "./utils/Game";
 
 function App() {
   
-  const [phase, setPhase] = useState('play');
+  // const [phase, setPhase] = useState('play');
 
-  const { Header, Footer, Sider, Content } = Layout;
-  let content = null;
+  const { Content } = Layout;
+  // let content = null;
   
   return (
     <div className="App">
@@ -24,7 +20,7 @@ function App() {
         <Content className="game-content">
             <GameState>
                 <GameContext.Consumer>
-                    {(context) => <GameArea/>}
+                    {() => <GameArea/>}
                 </GameContext.Consumer>
             </GameState>
         </Content>

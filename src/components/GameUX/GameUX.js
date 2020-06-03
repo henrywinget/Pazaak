@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useRef } from 'react';
-
+import GameContext from "../../context/game-context";
 import PropTypes from "prop-types";
+
 import { Col, Row } from "antd";
 import GameButton from "../GameButton";
 
 import './GameUX.scss';
-import { endTurn } from "../../context/reducers";
-import GameContext from "../../context/game-context";
 
 GameUX.propTypes = {
 	isUser: PropTypes.bool,
@@ -25,6 +24,7 @@ function GameUX({ isUser, isTurn, didStand, roundScore, standRound, gameStarted,
 	
 	
 	const processAILogic = () => {
+		// this might be a little redundant but what are you gonna do, it's me
 		if(roundScore === 20 || context.playerOne.isBust) {
 			standRound(); // always stand here
 		} else if(context.playerOne.didStand && roundScore === context.playerOne.roundScore) {

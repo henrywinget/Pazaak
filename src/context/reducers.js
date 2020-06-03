@@ -1,4 +1,3 @@
-import Card from "../utils/Card";
 import { drawSpace, shuffle } from "../utils/gameFuncs";
 
 export const SHUFFLE_DECK = "SHUFFLE_DECK";
@@ -8,6 +7,7 @@ export const RESET_ROUND = "RESET_ROUND";
 export const END_ROUND = "END_ROUND";
 export const START_GAME = "START_GAME";
 export const DETERMINE_PLAYER_ONE = "DETERMINE_PLAYER_ONE";
+export const PLAY_SIDE_CARD = "PLAY_SIDE_CARD";
 
 const determinePlayers = (player, state) => {
 	const players = {};
@@ -76,12 +76,64 @@ export const resetPlayerRound = state => {
 	}
 };
 
+export const playSideCard = (cardPlayed, player, state) => {
+	const { thisPlayerKey, thisPlayer } = determinePlayers(player, state);
+	const valuesInPlay = [...player.valuesInPlay];
+	const drawSpace = [...player.drawSpace];
+	const sideDeckInPlay = [...player.sideDeckInPlay];
+	let { roundScore } = player;
+	let { type, specialType, number, id } = cardPlayed;
+	switch(type) {
+		case "+":
+			roundScore += number;
+			break;
+		case "-":
+			roundScore -= number;
+			break;
+		case "177":
+			if(specialType === "+") {
+				roundScore += number;
+			} else {
+				roundScore -= number;
+			}
+			break;
+		default:
+			console.log("How did this get in there?");
+	}
+	valuesInPlay.push(cardPlayed);
+	valuesInPlay.forEach((card, index) => {
+		drawSpace[index].card = card;
+		drawSpace[index].hasCard = true;
+	});
+	sideDeckInPlay.forEach((card) => {
+		if(card.id === id
+			&& card.type === type
+			&& card.number === number) { // I want to be damn sure with all this JS object reference
+			card.isPlayed = true;
+		}
+	});
+	
+	return {
+		...state,
+		[thisPlayerKey]: {
+			...thisPlayer,
+			roundScore,
+			valuesInPlay,
+			sideDeckInPlay,
+			drawSpace,
+		}
+	}
+	
+};
+
 export const shuffleCards = state => {
 	console.log("Shuffling cards..");
 	return { ...state, deck: shuffle()};
 };
 
 export const drawCard = (player, state) => {
+	// this is all a little more complicated than it might need to be
+	// I tried having it a little more optimized, but it didn't work right
 	console.log(`${player.name} is drawing a card with a ${player.roundScore}`);
 	const cards = [...state.deck];
 	const cardDrawn = cards.shift();
@@ -90,11 +142,11 @@ export const drawCard = (player, state) => {
 	let isBust = false;
 	const { thisPlayerKey, nextPlayerKey, nextPlayer } = determinePlayers(player, state);
 	const valuesInPlay = [...player.valuesInPlay];
-	const playerDrawSpace = [...player.drawSpace];
+	const drawSpace = [...player.drawSpace];
 	valuesInPlay.push(cardDrawn);
 	valuesInPlay.forEach((card, index) => {
-		playerDrawSpace[index].card = card;
-		playerDrawSpace[index].hasCard = true;
+		drawSpace[index].card = card;
+		drawSpace[index].hasCard = true;
 	});
 	if(player.roundScore > 20) {
 		isBust = true;
@@ -110,7 +162,7 @@ export const drawCard = (player, state) => {
 			roundScore,
 			isBust,
 			valuesInPlay,
-			drawSpace: playerDrawSpace,
+			drawSpace,
 		},
 		[nextPlayerKey]: {
 			...nextPlayer,
@@ -196,6 +248,8 @@ export const gameReducer = (state, action) => {
 			return endRound(state);
 		case DETERMINE_PLAYER_ONE:
 			return determinePlayerOne(state);
+		case PLAY_SIDE_CARD:
+			return playSideCard(action.card, action.player, state);
 		default:
 			return state;
 	}
