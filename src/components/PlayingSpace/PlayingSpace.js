@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import SideDeck from "../SideDeck";
 import DrawArea from "../DrawArea";
 import GameUX from "../GameUX";
 
 import { Col, Row, Divider } from "antd";
+import GameContext from "../../context/game-context";
 
 PlayingSpace.propTypes = {
 	player: PropTypes.object.isRequired,
@@ -15,6 +16,13 @@ PlayingSpace.propTypes = {
 };
 
 function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted }) {
+	const context = useContext(GameContext);
+	const flipCard = card => {
+		console.log('Flipping card');
+		const cardType = card.specialType === "+" ? "-" : "+";
+		context.flipCard(card, cardType, player.id)
+	};
+	
 	const spaceStyle = {
 		padding: '0 25px'
 	};
@@ -28,6 +36,8 @@ function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted }) {
 			        sideDeck={player.sideDeckInPlay}
 			        playerId={player.id}
 			        drawCard={drawCard}
+			        flipCard={flipCard}
+			        playSideCard={context.playSideCard}
 			        endTurn={endTurn}
 			        standRound={standRound}
 			        gameStarted={gameStarted}
@@ -41,7 +51,7 @@ function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted }) {
 			<DrawArea drawSpace={player.drawSpace}
 			          cardsInPlay={player.valuesInPlay}/>
 			<Divider orientation={player.isUser ? "left" : "right"}>Side deck</Divider>
-			<SideDeck player={player}/>
+			<SideDeck player={player} flipCard={flipCard}/>
 		</Col>
 	);
 }

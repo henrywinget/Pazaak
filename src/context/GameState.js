@@ -38,7 +38,7 @@ const GameState = props => {
 	const endRound = () => dispatch({type: END_ROUND});
 	const determinePlayerOne = () => dispatch({type: DETERMINE_PLAYER_ONE });
 	const playSideCard = (card, player) => dispatch({type: PLAY_SIDE_CARD, card, player });
-	const flipCard = (card, player) => dispatch({type: FLIP_CARD, card, player});
+	const flipCard = (card, cardType, player) => dispatch({type: FLIP_CARD, card, cardType, player});
 	
 	return (
 		<GameContext.Provider value={{

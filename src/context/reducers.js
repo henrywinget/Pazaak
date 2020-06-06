@@ -226,19 +226,18 @@ export const standRound = (player, state) => {
 	}
 };
 
-export const flipCard = (cardFlipped, playerId, state) => {
+export const flipCard = (cardFlipped, cardType, playerId, state) => {
 	const { thisPlayerKey, thisPlayer } = determinePlayers(playerId, state);
 	const sideDeckInPlay = [...thisPlayer.sideDeckInPlay];
 	let { type, specialType, number, id } = cardFlipped;
 	sideDeckInPlay.forEach((card) => {
 		if(card.id === id
 			&& card.type === type
+			&& specialType !== (specialType === "+" ? "-" : "+")
 			&& card.number === number) { // I want to be damn sure with all this JS object reference
-			console.log(card.specialType = specialType === "+" ? "-" : "+");
-			card.specialType = specialType === "+" ? "-" : "+";
+			card.specialType = cardType;
 		}
 	});
-	console.log(sideDeckInPlay)
 	return {
 		...state,
 		[thisPlayerKey]: {
@@ -266,7 +265,7 @@ export const gameReducer = (state, action) => {
 		case PLAY_SIDE_CARD:
 			return playSideCard(action.card, action.player, state);
 		case FLIP_CARD:
-			return flipCard(action.card, action.player, state);
+			return flipCard(action.card, action.cardType, action.player, state);
 		default:
 			return state;
 	}

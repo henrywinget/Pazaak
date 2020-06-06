@@ -19,7 +19,21 @@ GameUX.propTypes = {
 	roundWins: PropTypes.number,
 };
 
-function GameUX({ isBust, isUser, isTurn, didStand, roundScore, standRound, gameStarted, endTurn, roundWins, sideDeck, playerId, playedCardThisRound }) {
+function GameUX({
+	                isBust,
+	                isUser,
+	                isTurn,
+	                didStand,
+	                roundScore,
+	                standRound,
+	                gameStarted,
+	                endTurn,
+	                roundWins,
+	                sideDeck,
+	                playerId,
+	                playedCardThisRound,
+	                playSideCard
+}) {
 	// all games state
 	const context = useContext(GameContext);
 	
@@ -54,7 +68,7 @@ function GameUX({ isBust, isUser, isTurn, didStand, roundScore, standRound, game
 		if(hasCardToPlay) {
 			let newScore = bestCard.type === "-" ? roundScore - bestCard.number : roundScore + bestCard.number;
 			console.log(`Playing a ${bestCard.type !== "177" ? bestCard.type : bestCard.specialType}${bestCard.number} to make score ${newScore}`);
-			context.playSideCard(bestCard, playerId);
+			playSideCard(bestCard, playerId);
 		}
 		return hasCardToPlay;
 	};
