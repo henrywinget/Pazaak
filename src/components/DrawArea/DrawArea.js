@@ -16,6 +16,7 @@ function DrawArea(props) {
 		                   number={hasCard ? card.number : null}
 		                   type={hasCard ? card.type : null}
 		                   drawSpaceIndex={index}
+		                   specialType={card.specialType}
 		                   isPlayed={!hasCard}/>
 	};
 	

@@ -1,0 +1,19 @@
+.flip-area-space {
+  background: #8B7E66;
+  padding: 5px;
+  margin: 10px 5px;
+  height: 100%;
+  min-height: 2rem;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #EEEEE0;
+  font-size: 30px;
+}
+
+.flip-area-space:hover {
+  color: #eee8b0;
+  cursor: pointer;
+}

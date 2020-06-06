@@ -52,9 +52,9 @@ function GameUX({ isBust, isUser, isTurn, didStand, roundScore, standRound, game
 		// console.log(bestCard);
 		// console.log(sideDeck);
 		if(hasCardToPlay) {
+			let newScore = bestCard.type === "-" ? roundScore - bestCard.number : roundScore + bestCard.number;
+			console.log(`Playing a ${bestCard.type !== "177" ? bestCard.type : bestCard.specialType}${bestCard.number} to make score ${newScore}`);
 			context.playSideCard(bestCard, playerId);
-			
-			console.log(`Playing a ${bestCard.type !== "177" ? bestCard.type : bestCard.specialType}${bestCard.number} to make score ${roundScore + bestCard.number}`);
 		}
 		return hasCardToPlay;
 	};

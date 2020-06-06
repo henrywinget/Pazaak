@@ -13,15 +13,25 @@ PazaakCard.propTypes = {
 	isFaceDown: PropTypes.bool,
 	isPlayed: PropTypes.bool,
 	drawSpaceIndex: PropTypes.number,
+	specialType: PropTypes.string,
 };
 
 function PazaakCard(props) {
 	
-	const determineColor = type => {
+	const cardBgColor = (type, specialType) => {
 		let color = "linear-gradient(to right, #66CD00, #5DFC0A, #83F52C, #5DFC0A, #66CD00)";
 		if(type === "+") color = "linear-gradient(to right, #104E8B, #1874CD, #104E8B)"; // blue
 		else if(type === "-") color = "linear-gradient(to right, #8B0000, #CD2626, #8B0000)"; // red
-		else if (type === "177") color = "linear-gradient(#1874CD, #104E8B, 50%, #CD2626 25%, #8B0000)"; // blue-red
+		else if (type === "177") color = specialType === "+" ? "linear-gradient(#1874CD, #104E8B, 50%, #CD2626 25%, #8B0000)" : "linear-gradient(#8B0000, #CD2626, 50%, #104E8B 25%, #1874CD)"; // blue-red
+		if(props.isFaceDown) color = "linear-gradient(#CDC9A5, #CDC9A5)";
+		return color;
+	};
+	
+	const typeColor = (type, specialType) => {
+		let color = "#66CD00";
+		if(type === "+") color = "#104E8B"; // blue
+		else if(type === "-") color = "#8B0000"; // red
+		else if (type === "177") color = specialType === "+" ? "#1874CD" : "#8B0000"; // blue-red
 		if(props.isFaceDown) color = "linear-gradient(#CDC9A5, #CDC9A5)";
 		return color;
 	};
@@ -42,7 +52,7 @@ function PazaakCard(props) {
 		color: !props.isFaceDown ? 'white' : '#CDC9A5',
 		fontWeight: 'bold',
 		borderRadius: '5px',
-		backgroundImage: determineColor(props.type),
+		backgroundImage: cardBgColor(props.type, props.specialType),
 	};
 	
 	const numberOuterStyle = {
@@ -62,9 +72,42 @@ function PazaakCard(props) {
 		alignItems: 'center',
 	};
 	
-	const printType = type => {
-		return type ? isNaN(type) ? type : String.fromCharCode(type) : type;
+	const typeCircleModifier = {
+		width: '35px',
+		height: '35px',
+		color: 'white',
+		borderRadius: '50px',
+		background: '#EEEEE0',
+		boxShadow: '10px 10px 5px grey;',
+		position: 'absolute',
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		top: 0,
+		right: 0,
 	};
+	
+	const innerTypeCircle = {
+		width: '75%',
+		height: '75%',
+		background: typeColor(props.type, props.specialType),
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		fontSize: '30px',
+		margin: ' auto',
+		color: 'white',
+		borderRadius: '50px',
+	};
+	
+	const printType = type => type ? isNaN(type) ? type : String.fromCharCode(type) : type;
+	
+	let typeModifier = null;
+	if(!props.isFaceDown) {
+		typeModifier = <div style={typeCircleModifier}><div style={innerTypeCircle}>{printType(props.specialType || props.type)}</div></div>
+	}
 	
 	return (
 		<div className="card-space">
@@ -80,6 +123,7 @@ function PazaakCard(props) {
 						</div>
 					</div>
 				</div>
+				{typeModifier}
 			</Card>
 		</div>
 	);

@@ -18,7 +18,7 @@ function GameArea() {
 	const players = [context.playerOne, context.playerTwo];
 	
 	const handleStandLogic = (playerOne, playerTwo) => {
-		console.log('Detected player stand. Handling state logic.')
+		console.log('Detected player stand. Handling state logic.');
 		if(playerOne.didStand) {
 			if(playerTwo.isBust || playerOne.isBust) {
 				context.endRound();
@@ -41,7 +41,7 @@ function GameArea() {
 				context.endRound();
 			}
 		}
-	}, [context.playerStood, handleStandLogic, context.playerOne, context.playerTwo]);
+	}, [context, handleStandLogic]);
 	
 	const startGame = () => {
 		if(context.playerOne.isTurn) {

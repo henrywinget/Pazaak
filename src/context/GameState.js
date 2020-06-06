@@ -10,6 +10,7 @@ import {
 	START_GAME,
 	DETERMINE_PLAYER_ONE,
 	PLAY_SIDE_CARD,
+	FLIP_CARD,
 } from "./reducers";
 import tests from "../utils/tests";
 import { shuffle } from "../utils/gameFuncs";
@@ -37,6 +38,7 @@ const GameState = props => {
 	const endRound = () => dispatch({type: END_ROUND});
 	const determinePlayerOne = () => dispatch({type: DETERMINE_PLAYER_ONE });
 	const playSideCard = (card, player) => dispatch({type: PLAY_SIDE_CARD, card, player });
+	const flipCard = (card, player) => dispatch({type: FLIP_CARD, card, player});
 	
 	return (
 		<GameContext.Provider value={{
@@ -56,6 +58,7 @@ const GameState = props => {
 			startGame,
 			determinePlayerOne,
 			playSideCard,
+			flipCard,
 		}}>
 			{props.children}
 		</GameContext.Provider>

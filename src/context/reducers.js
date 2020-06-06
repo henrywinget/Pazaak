@@ -8,6 +8,7 @@ export const END_ROUND = "END_ROUND";
 export const START_GAME = "START_GAME";
 export const DETERMINE_PLAYER_ONE = "DETERMINE_PLAYER_ONE";
 export const PLAY_SIDE_CARD = "PLAY_SIDE_CARD";
+export const FLIP_CARD = "FLIP_CARD";
 
 export const determinePlayerOne = state => {
 	console.log('Determining player');
@@ -225,6 +226,28 @@ export const standRound = (player, state) => {
 	}
 };
 
+export const flipCard = (cardFlipped, playerId, state) => {
+	const { thisPlayerKey, thisPlayer } = determinePlayers(playerId, state);
+	const sideDeckInPlay = [...thisPlayer.sideDeckInPlay];
+	let { type, specialType, number, id } = cardFlipped;
+	sideDeckInPlay.forEach((card) => {
+		if(card.id === id
+			&& card.type === type
+			&& card.number === number) { // I want to be damn sure with all this JS object reference
+			console.log(card.specialType = specialType === "+" ? "-" : "+");
+			card.specialType = specialType === "+" ? "-" : "+";
+		}
+	});
+	console.log(sideDeckInPlay)
+	return {
+		...state,
+		[thisPlayerKey]: {
+			...thisPlayer,
+			sideDeckInPlay,
+		}
+	}
+};
+
 
 export const gameReducer = (state, action) => {
 	switch(action.type) {
@@ -242,6 +265,8 @@ export const gameReducer = (state, action) => {
 			return determinePlayerOne(state);
 		case PLAY_SIDE_CARD:
 			return playSideCard(action.card, action.player, state);
+		case FLIP_CARD:
+			return flipCard(action.card, action.player, state);
 		default:
 			return state;
 	}
