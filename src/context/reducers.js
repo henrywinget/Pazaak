@@ -233,7 +233,7 @@ export const flipCard = (cardFlipped, cardType, playerId, state) => {
 	sideDeckInPlay.forEach((card) => {
 		if(card.id === id
 			&& card.type === type
-			&& specialType !== (specialType === "+" ? "-" : "+")
+			&& specialType !== (specialType === "+" ? "-" : "+") // reducer called twice for whatever reason.. this stops it
 			&& card.number === number) { // I want to be damn sure with all this JS object reference
 			card.specialType = cardType;
 		}

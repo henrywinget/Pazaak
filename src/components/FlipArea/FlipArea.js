@@ -12,7 +12,7 @@ FlipArea.propTypes = {
 
 function FlipArea({ isFlippable, flipCard }) {
 	return (
-		<div className="flip-area-space" onClick={flipCard}>{isFlippable ? <FontAwesomeIcon icon={faSync}/> : null}</div>
+		<div className={isFlippable ? "flip-area-space flippable" : "flip-area-space"} onClick={isFlippable ? flipCard : null}>{isFlippable ? <FontAwesomeIcon icon={faSync}/> : null}</div>
 	);
 }
 
