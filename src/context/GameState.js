@@ -11,7 +11,7 @@ import {
 	DETERMINE_PLAYER_ONE,
 	PLAY_SIDE_CARD,
 	FLIP_CARD,
-} from "./reducers";
+} from "./gameReducers";
 import tests from "../utils/tests";
 import { shuffle } from "../utils/gameFuncs";
 import GameContext from './game-context';
