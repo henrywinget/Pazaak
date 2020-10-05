@@ -49,7 +49,7 @@ export default function PlayerCreation(props) {
 				<Row>
 					<Col span={12}>
 						{attributes.map((attribute, index) => {
-							return <Row>
+							return <Row key={attribute.title + "_" + index}>
 								<Col span={18}>
 									<h3 style={{color: 'white'}}>{attribute.title}</h3>
 								</Col>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.scss';
 import 'antd/dist/antd.css';
 import { Layout } from 'antd';
@@ -21,6 +21,10 @@ function App() {
       // hasPlayer: true,
       hasPlayer: false,
   });
+  
+  useEffect(() => {
+    fetch('/api/').then(console.log).catch(console.error)
+  }, []);
 
   const { Content } = Layout;
   // let content = null;
