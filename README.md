@@ -10,6 +10,8 @@ The oldest card game in the galaxy
 
 * [Installation](#installation)
 
+* [Play](#play)
+
 * [Usage](#usage)
 
 * [License](#license)
@@ -27,6 +29,10 @@ To install necessary dependencies, run the following command:
 ```
 npm i
 ```
+
+## Play
+
+[Play Pazaak](https://pure-pazaak.herokuapp.com/)
 
 ## Usage
 
