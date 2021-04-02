@@ -248,6 +248,7 @@ export const flipCard = (cardFlipped, cardType, playerId, state) => {
 };
 
 export const setPlayerOne = (player, state) => {
+	
 	return {
 		...state,
 		playerOne: {

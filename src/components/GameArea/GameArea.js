@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { Row, Col } from "antd";
 import GameButton from "../GameButton";
+import PlayerContext from "../../context/player-context";
 import GameContext from "../../context/game-context";
 import './GameArea.scss';
 import PlayingSpace from "../PlayingSpace/PlayingSpace";
@@ -9,6 +10,7 @@ import { determinePlayers } from "../../utils/gameFuncs";
 
 function GameArea() {
 	const context = useContext(GameContext);
+	const playerContext = useContext(PlayerContext);
 	const players = [context.playerOne, context.playerTwo];
 	
 	const handleStandLogic = (playerOne, playerTwo) => {
@@ -24,6 +26,11 @@ function GameArea() {
 			}
 		}
 	};
+	
+	useEffect(() =>{
+		console.log('setting playerstate')
+		context.setPlayerOne(playerContext);
+	}, [playerContext]);
 	
 	useEffect(() => {
 		if(context.playerStood) {

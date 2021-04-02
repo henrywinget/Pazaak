@@ -8,6 +8,30 @@ import {
 
 import PlayerContext from './player-context';
 import uid from "uid";
+import Card from "../utils/Card";
+
+function generateRandomSideDeck () {
+	let cards = [];
+	for(let i = 0; i < 4; i++) {
+		const num = Math.floor(Math.random() * Math.floor(5)) + 1;
+		let type = '';
+		switch(Math.floor(Math.random() * Math.floor(3)) + 1) {
+			case 1:
+				type = '+';
+				break;
+			case 2:
+				type = '-';
+				break;
+			case 3:
+				type = '177';
+				break;
+			default:
+				console.log('Say whaaaaaaaaaaaat?');
+		}
+		cards.push(new Card(num, type));
+	}
+	return cards;
+}
 
 const initialState = {
 	id: uid(18),
@@ -34,7 +58,7 @@ const initialState = {
 	roundWins: 0,
 	valuesInPlay:  [],
 	sideDeck: [],
-	sideDeckInPlay: [],
+	sideDeckInPlay: generateRandomSideDeck(),
 	gameWins: 0,
 	gameLosses: 0,
 	drawSpace: [
