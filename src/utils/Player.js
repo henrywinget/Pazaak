@@ -7,7 +7,7 @@ export default class Player {
 		this.name = name;
 		this.portrait = '';
 		// to implement a more RPG style
-		this.cool = 0; // used to determine who goes first, higher cool less likely chance of going first (no repercussions)
+		this.cool = 0; // used to determine who goes first, higher cool means you're less likely chance of going first (no repercussions)
 		this.coercion = 0; // used to bait the opponent into holding out for one more card when they would otherwise stand (no repercussions)
 		this.deception = 0; // used to attempt to get out of repercussions if caught cheating to avoid loss stat and money loss
 		this.negotiation = 0; // used to negotiate higher bids and bribe if caught cheating to avoid a loss stat
@@ -39,6 +39,11 @@ export default class Player {
 			{ card: {}, hasCard: false},
 			{ card: {}, hasCard: false},
 			{ card: {}, hasCard: false},
-		]
+		];
+		this.setStat = function (stat, value) {
+			if(stat in this) {
+				this[stat] = value;
+			}
+		}
 	}
 }

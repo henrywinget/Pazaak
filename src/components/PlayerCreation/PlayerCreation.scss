@@ -1,3 +1,7 @@
+$breakpoints: (phone: 640px,
+        tablet: 768px,
+        desktop: 1024px) !default;
+
 .player-creation-area {
   border: 2px solid black;
   padding: 50px;
@@ -15,4 +19,17 @@
   background: linear-gradient(to right, #052842, #05466d, #052842);
   color: white;
 
+}
+
+.player-portrait-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-pazaak-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }

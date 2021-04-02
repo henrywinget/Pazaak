@@ -9,6 +9,7 @@ export const START_GAME = "START_GAME";
 export const DETERMINE_PLAYER_ONE = "DETERMINE_PLAYER_ONE";
 export const PLAY_SIDE_CARD = "PLAY_SIDE_CARD";
 export const FLIP_CARD = "FLIP_CARD";
+export const SET_P1 = "SET_P1";
 
 export const determinePlayerOne = state => {
 	console.log('Determining player');
@@ -246,9 +247,21 @@ export const flipCard = (cardFlipped, cardType, playerId, state) => {
 	}
 };
 
+export const setPlayerOne = (player, state) => {
+	return {
+		...state,
+		playerOne: {
+			...state.playerOne,
+			...player,
+		}
+	}
+};
+
 
 export const gameReducer = (state, action) => {
 	switch(action.type) {
+		case SET_P1:
+			return setPlayerOne(action.player, state);
 		case SHUFFLE_DECK:
 			return shuffleCards(state);
 		case DRAW_CARD:

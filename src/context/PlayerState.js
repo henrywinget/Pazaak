@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 
 import {
 	playerReducer,
+	SET_PLAYER,
 	CHANGE_NAME,
 } from "./playerReducer";
 
@@ -52,11 +53,13 @@ const initialState = {
 const PlayerState = props => {
 	const [playerState, dispatch] = useReducer(playerReducer, initialState);
 	
-	const handleNameInput = name => dispatch({type: CHANGE_NAME}, name);
+	const setPlayer = player => dispatch({type: SET_PLAYER, player});
+	const handleNameInput = name => dispatch({type: CHANGE_NAME, name});
 	
 	return (
 		<PlayerContext.Provider value ={{
-			player: playerState,
+			...playerState,
+			setPlayer,
 			handleNameInput,
 		}}>
 			{props.children}

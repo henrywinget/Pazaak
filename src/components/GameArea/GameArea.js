@@ -1,17 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Row, Col } from "antd";
 import GameButton from "../GameButton";
-import PropTypes from 'prop-types';
 import GameContext from "../../context/game-context";
 import './GameArea.scss';
-import tests from "../../utils/tests";
 import PlayingSpace from "../PlayingSpace/PlayingSpace";
 
 import { determinePlayers } from "../../utils/gameFuncs";
-
-GameArea.propTypes = {
-
-};
 
 function GameArea() {
 	const context = useContext(GameContext);

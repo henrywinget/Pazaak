@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 
 import {
 	gameReducer,
+	SET_P1,
 	SHUFFLE_DECK,
 	DRAW_CARD,
 	END_ROUND,
@@ -30,6 +31,8 @@ const GameState = props => {
 	
 	const [gameState, dispatch] = useReducer(gameReducer, initialState);
 	
+	const setPlayerOne = player => dispatch({type: SET_P1, player});
+	
 	const startGame = () => dispatch({type: START_GAME});
 	const shuffleCards = () => dispatch({type: SHUFFLE_DECK});
 	const drawCard = player => dispatch({type: DRAW_CARD, player });
@@ -50,6 +53,7 @@ const GameState = props => {
 			playerTwo: gameState.playerTwo,
 			playerStood: gameState.playerStood,
 			playerIsBust: gameState.playerIsBust,
+			setPlayerOne,
 			shuffleCards,
 			drawCard,
 			standRound,
