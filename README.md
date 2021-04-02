@@ -32,7 +32,7 @@ npm i
 
 ## Play
 
-[Play Pazaak](https://pure-pazaak.herokuapp.com/)
+[Play Pazaak](https://pure-pazaak.herokuapp.com/){:target="_blank" rel="noopener"}
 
 ## Usage
 
