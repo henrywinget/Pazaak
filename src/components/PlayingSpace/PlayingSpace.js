@@ -44,14 +44,14 @@ function PlayingSpace({ player, drawCard, endTurn, standRound, gameStarted }) {
 			        didStand={player.didStand}
 			        isTurn={player.isTurn}
 			        isUser={player.isUser}
-			        isBust={player.isBust}
+			        isBust={player.isBust}p
 			        playedCardThisRound={player.playedCardThisRound}
 			        roundScore={player.roundScore}
 			/>
 			<DrawArea drawSpace={player.drawSpace}
 			          cardsInPlay={player.valuesInPlay}/>
 			<Divider orientation={player.isUser ? "left" : "right"}>Side deck</Divider>
-			<SideDeck player={player} flipCard={flipCard}/>
+			<SideDeck player={player} flipCard={flipCard} playSideCard={context.playSideCard}/>
 		</Col>
 	);
 }

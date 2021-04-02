@@ -107,7 +107,6 @@ export const playSideCard = (cardPlayed, playerId, state) => {
 			sideDeckInPlay,
 			drawSpace,
 			isBust: roundScore > 20,
-			playedCardThisRound: true,
 		}
 	}
 	

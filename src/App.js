@@ -19,12 +19,18 @@ function App() {
   const [playerState, setPlayerState] = useState({
       player: {},
       // hasPlayer: true,
-      hasPlayer: false,
+      hasPlayer: true,
   });
   
   useEffect(() => {
-    fetch('/api/').then(console.log).catch(console.error)
+      console.log('running!');
+      // api call at the beginning
   }, []);
+    
+    useEffect(() => {
+        console.log('running!');
+        // when player state changes
+    }, [playerState]);
 
   const { Content } = Layout;
   // let content = null;
