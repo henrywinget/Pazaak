@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: pure-pazaak.herokuapp.com
+Token: d36daae320b1c722f04d71694b88e1a636a50dc04d84f777e4db091479a3c0df
