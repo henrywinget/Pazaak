@@ -78,7 +78,7 @@ function PazaakCard(props) {
 		color: 'white',
 		borderRadius: '50px',
 		background: '#EEEEE0',
-		boxShadow: '10px 10px 5px grey;',
+		boxShadow: '10px 10px 5px grey',
 		position: 'absolute',
 		display: 'flex',
 		flexDirection: 'column',

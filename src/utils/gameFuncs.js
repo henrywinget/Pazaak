@@ -64,6 +64,8 @@ export const determinePlayers = (player, state) => {
 	return players;
 };
 
+export const rollSkill = skill => Math.floor(Math.random() * 20) + 1 + skill;
+
 export default {
 	shuffle,
 	drawSpace,

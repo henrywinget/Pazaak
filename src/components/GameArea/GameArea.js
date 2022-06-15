@@ -6,7 +6,7 @@ import GameContext from "../../context/game-context";
 import './GameArea.scss';
 import PlayingSpace from "../PlayingSpace/PlayingSpace";
 
-import { determinePlayers } from "../../utils/gameFuncs";
+import { determinePlayers, rollSkill } from "../../utils/gameFuncs";
 
 function GameArea() {
 	const context = useContext(GameContext);
@@ -45,11 +45,17 @@ function GameArea() {
 	}, [context, handleStandLogic]);
 	
 	const startGame = () => {
-		if(context.playerOne.isTurn) {
-			context.drawCard(context.playerOne)
-		} else {
-			context.drawCard(context.playerTwo);
-		}
+		const playerGoingFirst = {...determineFirst(context.playerOne, context.playerTwo)};
+		console.log(playerGoingFirst.name + " is going first!");
+		context.drawCard(playerGoingFirst);
+	};
+	
+	const determineFirst = (playerOne, playerTwo) => {
+		const p1Cool = rollSkill(playerOne.cool);
+		const p2Cool = rollSkill(playerTwo.cool);
+		if(p1Cool === p2Cool) return determineFirst(playerOne, playerTwo); // redo going first skill checks
+		else if (p1Cool > p2Cool) return playerTwo;
+		else return playerOne;
 	};
 	
 	const endTurn = player => {

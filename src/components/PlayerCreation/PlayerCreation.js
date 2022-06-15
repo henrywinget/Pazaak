@@ -212,7 +212,10 @@ export default function PlayerCreation(props) {
 								</Col>
 								<Col span={1} style={{ textAlign: 'right', }}>
 									<FontAwesomeIcon icon={faAngleDown}
-									                 style={{ cursor: 'pointer', }}
+									                 style={{
+									                 	cursor: 'pointer',
+										                 display: userStats[attribute.title] < 6 && 'none'
+									                 }}
 									                 onClick={() => setUserStat('-', attribute.title)}/>
 								</Col>
 								<Col span={1}  style={{ textAlign: 'center', }}>
@@ -222,7 +225,10 @@ export default function PlayerCreation(props) {
 									textAlign: 'left',
 								}}>
 									<FontAwesomeIcon icon={faAngleUp}
-									                 style={{ cursor: 'pointer', }}
+									                 style={{
+										                 cursor: 'pointer',
+										                 display: userStats[attribute.title] > 15 && 'none'
+									                 }}
 									                 onClick={() => setUserStat('+', attribute.title)} />
 								</Col>
 								<Col span={18}>
